@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		060CE3F71C8BB73B00A4B663 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 060CE3F51C8BB73B00A4B663 /* Model.xcdatamodeld */; };
+		060CE4361C8C780800A4B663 /* CostCalcItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060CE4351C8C780800A4B663 /* CostCalcItem.swift */; };
+		060CE4381C8C794700A4B663 /* ItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060CE4371C8C794700A4B663 /* ItemManager.swift */; };
+		060CE43A1C8C806F00A4B663 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060CE4391C8C806F00A4B663 /* MapView.swift */; };
 		0658D2711C77AA4B00FC2CBF /* civic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0658D2701C77AA4B00FC2CBF /* civic.jpg */; };
 		06DD4DC01C7E1F67000204BF /* civic.png in Resources */ = {isa = PBXBuildFile; fileRef = 06DD4DBF1C7E1F67000204BF /* civic.png */; };
 		06F2FD841C7759C30072FBC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F2FD831C7759C30072FBC2 /* AppDelegate.swift */; };
@@ -38,7 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		060CE3F61C8BB73B00A4B663 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		060CE4351C8C780800A4B663 /* CostCalcItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostCalcItem.swift; sourceTree = "<group>"; };
+		060CE4371C8C794700A4B663 /* ItemManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemManager.swift; sourceTree = "<group>"; };
+		060CE4391C8C806F00A4B663 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		0658D2701C77AA4B00FC2CBF /* civic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = civic.jpg; sourceTree = "<group>"; };
 		06DD4DBF1C7E1F67000204BF /* civic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = civic.png; sourceTree = "<group>"; };
 		06F2FD801C7759C30072FBC2 /* IdleCost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IdleCost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +89,6 @@
 		06F2FD771C7759C30072FBC2 = {
 			isa = PBXGroup;
 			children = (
-				060CE3F51C8BB73B00A4B663 /* Model.xcdatamodeld */,
 				06F2FD821C7759C30072FBC2 /* IdleCost */,
 				06F2FD971C7759C30072FBC2 /* IdleCostTests */,
 				06F2FDA21C7759C30072FBC2 /* IdleCostUITests */,
@@ -108,6 +111,9 @@
 			children = (
 				06F2FD831C7759C30072FBC2 /* AppDelegate.swift */,
 				06F2FD851C7759C30072FBC2 /* ViewController.swift */,
+				060CE4371C8C794700A4B663 /* ItemManager.swift */,
+				060CE4351C8C780800A4B663 /* CostCalcItem.swift */,
+				060CE4391C8C806F00A4B663 /* MapView.swift */,
 				06F2FDB31C775A930072FBC2 /* IdleCostCalc.swift */,
 				0658D2701C77AA4B00FC2CBF /* civic.jpg */,
 				06F2FD871C7759C30072FBC2 /* Main.storyboard */,
@@ -273,10 +279,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				060CE43A1C8C806F00A4B663 /* MapView.swift in Sources */,
 				06F2FD861C7759C30072FBC2 /* ViewController.swift in Sources */,
 				06F2FD841C7759C30072FBC2 /* AppDelegate.swift in Sources */,
 				06F2FDB41C775A930072FBC2 /* IdleCostCalc.swift in Sources */,
-				060CE3F71C8BB73B00A4B663 /* Model.xcdatamodeld in Sources */,
+				060CE4381C8C794700A4B663 /* ItemManager.swift in Sources */,
+				060CE4361C8C780800A4B663 /* CostCalcItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,19 +532,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		060CE3F51C8BB73B00A4B663 /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				060CE3F61C8BB73B00A4B663 /* Model.xcdatamodel */,
-			);
-			currentVersion = 060CE3F61C8BB73B00A4B663 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 06F2FD781C7759C30072FBC2 /* Project object */;
 }

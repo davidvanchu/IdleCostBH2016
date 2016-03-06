@@ -63,6 +63,13 @@ class IdleCostCalc {
         return spent
     }
     
+    func setIdleTime(seconds: Double) {
+        idleTimeSeconds = seconds;
+        idleTimeMinutes = idleTimeSeconds / 60
+        fuelUsed = gallonsPerMinute * idleTimeMinutes
+        spent = fuelCost * fuelUsed
+    }
+    
     func reset() {
         fuelUsed = 0;
         idleTimeMinutes = 0;

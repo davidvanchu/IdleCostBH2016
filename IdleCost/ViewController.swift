@@ -8,10 +8,12 @@
 
 import UIKit
 import CoreLocation
-import CoreData
+import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate{
+class ViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var map: MKMapView!
+    
     @IBOutlet weak var SpeedLabel: UILabel!
     @IBOutlet weak var IdleTimeLabel: UILabel!
     @IBOutlet weak var FuelUsedLabel: UILabel!
@@ -26,10 +28,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var lastUpdate:NSDate = NSDate()
     var idleTimeSeconds:Double = 0
     
-    var costData = [NSManagedObject]()
+    let costData = ItemManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib
         timeSinceLast = 0
         locationManager.delegate = self
@@ -41,6 +44,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locationManager.startUpdatingHeading()
         self.view.backgroundColor = UIColor.magentaColor()
         
+        if costData.itemList.count > 0 {
+            let restoreData = costData.itemList[0].idleTimeSeconds
+            
+            iCC.setIdleTime(restoreData)
+            print("Restored \(restoreData)")
+            idleTimeSeconds = restoreData
+            //updateTime()
+            setLbls()
+        }
+        
         let formatter = NSNumberFormatter()
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
@@ -49,7 +62,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         IdleTimeLabel.text = "Idle Time: \(formatter.stringFromNumber(iCC.getIdleTimeSeconds()/60)!) minutes."
         SpentLabel.text = "You have spent $\(formatter.stringFromNumber(iCC.getSpent())!) while idling."
         timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: true)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        /**
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "CostCalc")
         
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            costData = results as! [NSManagedObject]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        print("Fetched!")
+        
+        let restoreData = costData[0]
+        
+        let restoreData2 = restoreData.valueForKey("idleTime")
+        print("Restored \(restoreData2)")
+        
+        iCC.setIdleTime(restoreData2 as! Double)
+
+        //iCC.setIdleTime((costData[0].valueForKey("idleTime") as? Double)!)
+        */
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,13 +110,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         
     }
     
-    func update() {
+  /**  func update() {
         print(CLLocationManager.authorizationStatus().rawValue)
         //if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.AuthorizedAlways) {
         //    return;
         //}
         let speed = locationManager.location!.speed
-        SpeedLabel.text = "Speed: \(speed) mph"
+        //SpeedLabel.text = "Speed: \(speed) mph"
+        setSpeedLbl(speed)
         print(speed)
         if (locationManager.location!.speed > 3) {
             return
@@ -93,6 +132,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         //IdleTimeLabel.text = "Idle Time: \(formatter.stringFromNumber(iCC.getIdleTimeSeconds()/60)!) minutes."
         SpentLabel.text = "You have spent $\(formatter.stringFromNumber(iCC.getSpent())!) while idling."
     }
+*/
     
     func updateTime() {
         print(CLLocationManager.authorizationStatus().rawValue)
@@ -104,6 +144,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         }
         iCC.updateTime()
         iCC.updateCalc()
+        idleTimeSeconds = iCC.getIdleTimeSeconds()
         setLbls()
     }
 
@@ -116,9 +157,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         //print ("Speed: \(location?.speed)")
         //print ("timeSinceLast: \(timeSinceLast)")
         //update();
+        
+        //mapkit??
+        let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        
+        map.showsUserLocation = true
+       //map.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true)
+        
+        self.map.setRegion(region, animated: true)
     }
     
-    func setSpeedLbl(speed: Double) {
+    func setSpeedLbl(var speed: Double) {
+        if speed < 0 {
+            speed = 0.0
+        }
         SpeedLabel.text = "Speed: \(speed) mph"
     }
     
@@ -151,8 +204,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         setFuelUsedLbl()
         setSpentLbl()
         
-        costData[0].setValue(iCC.getIdleTimeSeconds(), forKey: "idleTime")
+        //costData[0].setValue(iCC.getIdleTimeSeconds(), forKey: "idleTime")
+        saveData()
+    }
+    
+    func saveData() {
+        print("Help")
+        if costData.itemList.count < 1 {
+            costData.itemList.append(CostCalcItem(idleTimeSecs: idleTimeSeconds))
+        }
+        costData.itemList[0] = (CostCalcItem(idleTimeSecs: idleTimeSeconds))
+        costData.save()
+        print("Saved \(idleTimeSeconds)")
+        /**
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let entity = NSEntityDescription.entityForName("CostCalc", inManagedObjectContext: managedContext)
+        
+        let cost = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+        
+        cost.setValue(iCC.getIdleTimeSeconds(), forKey: "idleTime")
+        print("Saving \(iCC.getIdleTimeSeconds())")
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print ("Could not save \(error) \(error.userInfo)")
+        }
+        print("Saved!")
+        
+        */
     }
 
 }
-
